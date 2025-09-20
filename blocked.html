@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Site Blocked</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; background:linear-gradient(135deg,#0f172a,#1f2937); color:#e5e7eb; }
+    .box { max-width:680px; padding:24px; background:#111827; border:1px solid #374151; border-radius:16px; }
+    h1 { margin:0 0 8px; font-size:22px; }
+    .muted { color:#9ca3af; }
+    .row { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .btn { background:#2563eb; color:white; border:none; border-radius:10px; padding:10px 12px; cursor:pointer; }
+    .btn.secondary { background:#374151; }
+    code { background:#0b1220; padding:2px 6px; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Blocked by URL Control</h1>
+    <p class="muted">This site is blocked because its domain is not in the allowed list (.com / .org) and it is not on your whitelist.</p>
+    <p>URL: <code id="blockedUrl">—</code></p>
+    <div class="row">
+      <button class="btn" id="goBackBtn">Go Back</button>
+      <button class="btn secondary" id="closeBtn">Close Tab</button>
+      <button class="btn" id="allowBtn">Whitelist & Return</button>
+    </div>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const p = new URLSearchParams(location.search);
+      return p.get(name) || "";
+    }
+    const original = getParam("url");
+    document.getElementById("blockedUrl").textContent = original || "—";
+
+    document.getElementById("goBackBtn").onclick = () => {
+      history.length > 1 ? history.back() : location.href = "about:blank";
+    };
+
+    document.getElementById("closeBtn").onclick = () => {
+      try {
+        chrome.runtime.sendMessage({ action: "closeActiveTab" });
+      } catch {
+        window.close();
+      }
+    };
+
+    document.getElementById("allowBtn").onclick = () => {
+      try {
+        const host = new URL(original).hostname.toLowerCase().replace(/\.$/, "");
+        chrome.runtime.sendMessage({ action: "whitelistAndGoBack", hostname: host }, () => {
+          // Navigate back to original site
+          if (original) location.href = original;
+        });
+      } catch {
+        // ignore
+      }
+    };
+  </script>
+</body>
+</html>

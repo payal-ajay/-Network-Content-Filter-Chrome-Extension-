@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Control Extension</title>
+  <style>
+    body { font-family: sans-serif; padding: 16px; }
+    .remove-btn { margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <h2>URL Control + Ad Blocker</h2>
+
+  <!-- Extension Enable Toggle -->
+  <label>
+    <input type="checkbox" id="toggleExtension" />
+    Extension Enabled
+  </label>
+  <br><br>
+
+  <!-- Block Mode Selector -->
+  <label for="blockMode">Block Mode:</label>
+  <select id="blockMode">
+    <option value="redirect">Redirect</option>
+    <option value="notify">Notify</option>
+  </select>
+  <br><br>
+
+  <!-- Current Site -->
+  <div>
+    <strong>Current Site:</strong> <span id="currentSite">Unknown</span>
+    <button id="whitelistBtn">Whitelist This Site</button>
+  </div>
+  <br>
+
+  <!-- Blocked count and whitelisted -->
+  <div>
+    Blocked Count: <span id="blockedCount">0</span><br>
+    Whitelisted Count: <span id="whitelistedCount">0</span>
+    <button id="resetBtn">Reset Counters</button>
+  </div>
+  <br>
+
+  <!-- Whitelist Display -->
+  <div>
+    <strong>Whitelisted Sites:</strong>
+    <ul id="whitelist"></ul>
+  </div>
+  <br>
+
+  <!-- Aggressive Adblock Toggle -->
+  <label>
+    <input type="checkbox" id="toggleAggressiveAdblock" />
+    Aggressive Ad Block
+  </label>
+  <br><br>
+
+  <!-- Adblock Whitelist -->
+  <button id="whitelistAdblockBtn">Whitelist Site for Ad Block</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
